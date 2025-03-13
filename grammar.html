@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Grammar - Sparkido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('eng_bg1.jpg'); /* Replace with your actual background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1 {
+            font-size: 36px;
+        }
+
+        .explanation-btn {
+            background: #14603a;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .explanation-btn:hover {
+            background: #277e42;
+        }
+
+        .explanation {
+            display: none;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 10px auto;
+            font-size: 20px;
+            line-height: 1.6;
+        }
+
+        .drag-drop-section {
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .drag-items {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .word {
+            background: lightblue;
+            color: black;
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 8px;
+            cursor: grab;
+            display: inline-block;
+            width: 100px;
+            text-align: center;
+            margin: 5px;
+        }
+
+        .drop-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .drop-box {
+            background: white;
+            color: black;
+            width: 300px;
+            height: 200px;
+            margin: 10px auto;
+            border: 2px dashed black;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .correct {
+            background: lightgreen !important;
+        }
+
+        .wrong {
+            background: lightcoral !important;
+        }
+
+        #drag-result {
+            font-size: 22px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            margin-top: 30px;
+            background: #0f7844;
+            color: rgb(247, 247, 247);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background: #398667;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Learn Grammar!</h1>
+
+        <!-- Explanation Buttons -->
+        <button class="explanation-btn" onclick="toggleExplanation('noun-expl')">What is a Noun?</button>
+        <button class="explanation-btn" onclick="toggleExplanation('verb-expl')">What is a Verb?</button>
+        <button class="explanation-btn" onclick="toggleExplanation('adj-expl')">What is an Adjective?</button>
+
+        <!-- Explanation Sections -->
+        <div id="noun-expl" class="explanation">
+            <h2>Nouns</h2>
+            <p>A noun is a word that names a person, place, thing, or idea.<br> Example: **apple, dog, school, happiness**.</p>
+        </div>
+
+        <div id="verb-expl" class="explanation">
+            <h2>Verbs</h2>
+            <p>A verb is a word that shows an action.<br> Example: **run, jump, eat, sing**.</p>
+        </div>
+
+        <div id="adj-expl" class="explanation">
+            <h2>Adjectives</h2>
+            <p>An adjective describes a noun.<br> Example: **big, happy, blue, tall**.</p>
+        </div>
+
+        <!-- Drag & Drop Section -->
+        <div class="drag-drop-section">
+            <h2>Drag & Drop: Sort the Words!</h2>
+            <p>Drag the words below into the correct category.</p>
+
+            <div class="drag-items">
+                <div class="word" draggable="true" ondragstart="drag(event)" id="apple">Apple 🍎</div>
+                <div class="word" draggable="true" ondragstart="drag(event)" id="run">Run 🏃</div>
+                <div class="word" draggable="true" ondragstart="drag(event)" id="happy">Happy 😊</div>
+                <div class="word" draggable="true" ondragstart="drag(event)" id="dog">Dog 🐶</div>
+                <div class="word" draggable="true" ondragstart="drag(event)" id="jump">Jump 🤾</div>
+                <div class="word" draggable="true" ondragstart="drag(event)" id="big">Big 📏</div>
+            </div>
+
+            <div class="drop-boxes">
+                <div class="drop-box" id="nouns" ondrop="drop(event, 'nouns')" ondragover="allowDrop(event)">Nouns</div>
+                <div class="drop-box" id="verbs" ondrop="drop(event, 'verbs')" ondragover="allowDrop(event)">Verbs</div>
+                <div class="drop-box" id="adjectives" ondrop="drop(event, 'adjectives')" ondragover="allowDrop(event)">Adjectives</div>
+            </div>
+
+            <p id="drag-result"></p>
+        </div>
+
+        <!-- Back Button -->
+        <a href="index.html">
+            <button class="back-btn">Back</button>
+        </a>
+    </div>
+
+    <script>
+        function toggleExplanation(id) {
+            let expl = document.getElementById(id);
+            expl.style.display = expl.style.display === "block" ? "none" : "block";
+        }
+
+        let correctWords = {
+            nouns: ["apple", "dog"],
+            verbs: ["run", "jump"],
+            adjectives: ["happy", "big"]
+        };
+
+        let placedWords = {};
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id);
+        }
+
+        function drop(event, category) {
+            event.preventDefault();
+            let wordId = event.dataTransfer.getData("text");
+            let wordElement = document.getElementById(wordId);
+            let dropBox = document.getElementById(category);
+
+            if (placedWords[wordId]) {
+                document.getElementById(placedWords[wordId]).removeChild(wordElement);
+            }
+
+            dropBox.appendChild(wordElement);
+            placedWords[wordId] = category;
+
+            if (correctWords[category].includes(wordId)) {
+                wordElement.classList.remove("wrong");
+                wordElement.classList.add("correct");
+            } else {
+                wordElement.classList.remove("correct");
+                wordElement.classList.add("wrong");
+            }
+
+            checkCompletion();
+        }
+
+        function checkCompletion() {
+            if (Object.keys(placedWords).length === 6 && Object.entries(placedWords).every(([word, category]) => correctWords[category]?.includes(word))) {
+                document.getElementById("drag-result").textContent = "🎉 Great job! You sorted everything correctly!";
+            } else {
+                document.getElementById("drag-result").textContent = "";
+            }
+        }
+    </script>
+
+</body>
+</html>

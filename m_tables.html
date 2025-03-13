@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Multiplication Table</title>
+    <style>
+        /* General Page Styles */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 150, 255, 0.6);
+            padding: 15px;
+            display: inline-block;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Multiplication Table Container */
+        .table-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Individual Table Box */
+        .table-box {
+            width: 220px;
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .table-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        /* Table Title */
+        .table-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            padding: 8px;
+            background: rgba(0, 255, 150, 0.8);
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        /* Multiplication Numbers */
+        .multiplication {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            padding: 5px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Hover Animation */
+        .multiplication:hover {
+            color: yellow;
+            transform: scale(1.1);
+        }
+
+        /* Quiz Mode */
+        .quiz-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            display: inline-block;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            font-size: 18px;
+            border: none;
+            background: #ff6347;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #e5533d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .table-row {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎉 Fun Multiplication Table 🎈</h1>
+
+    <div class="table-wrapper">
+        <!-- Rows for tables -->
+        <div class="table-row" id="row-1"></div>
+        <div class="table-row" id="row-2"></div>
+        <div class="table-row" id="row-3"></div>
+    </div>
+
+    <!-- Interactive Quiz Mode -->
+    <div class="quiz-container">
+        <h2>🔢 Try the Multiplication Quiz!</h2>
+        <p id="quiz-question"></p>
+        <input type="number" id="quiz-answer" placeholder="Your Answer">
+        <button class="btn" onclick="checkQuizAnswer()">Submit</button>
+        <p id="quiz-feedback"></p>
+    </div>
+
+    <script>
+        // Generate Multiplication Tables
+        for (let i = 1; i <= 9; i++) {
+            let tableBox = document.createElement("div");
+            tableBox.classList.add("table-box");
+
+            let title = document.createElement("div");
+            title.classList.add("table-title");
+            title.innerText = `${i}️⃣ Table`;
+            tableBox.appendChild(title);
+
+            for (let j = 1; j <= 10; j++) {
+                let row = document.createElement("div");
+                row.classList.add("multiplication");
+                row.innerText = `${i} × ${j} = ${i * j}`;
+                row.onclick = function () {
+                    playSound();
+                };
+                tableBox.appendChild(row);
+            }
+
+            // Assign tables to rows
+            if (i <= 3) {
+                document.getElementById("row-1").appendChild(tableBox);
+            } else if (i <= 6) {
+                document.getElementById("row-2").appendChild(tableBox);
+            } else {
+                document.getElementById("row-3").appendChild(tableBox);
+            }
+        }
+
+        // Play Sound Effects
+        function playSound() {
+            let sound = new Audio("https://www.soundjay.com/button/beep-07.wav");
+            sound.play();
+        }
+
+        // Multiplication Quiz
+        let num1 = Math.floor(Math.random() * 9) + 1;
+        let num2 = Math.floor(Math.random() * 10) + 1;
+        document.getElementById("quiz-question").innerText = `What is ${num1} × ${num2}?`;
+
+        function checkQuizAnswer() {
+            let answerBox = document.getElementById("quiz-answer");
+            let feedback = document.getElementById("quiz-feedback");
+            let correctAnswer = num1 * num2;
+
+            if (parseInt(answerBox.value) === correctAnswer) {
+                feedback.innerText = "🎉 Correct!";
+                feedback.style.color = "green";
+                playSound();
+            } else {
+                feedback.innerText = "❌ Try Again!";
+                feedback.style.color = "red";
+                playWrongSound();
+            }
+
+            // Generate New Question
+            num1 = Math.floor(Math.random() * 9) + 1;
+            num2 = Math.floor(Math.random() * 10) + 1;
+            document.getElementById("quiz-question").innerText = `What is ${num1} × ${num2}?`;
+        }
+
+        // Play Wrong Answer Sound
+        function playWrongSound() {
+            let sound = new Audio("https://www.soundjay.com/button/beep-10.wav");
+            sound.play();
+        }
+    </script>
+
+</body>
+</html>

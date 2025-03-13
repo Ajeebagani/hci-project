@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Quiz - Sparkido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('Sci_bg_1.jpg'); /* Replace with your actual background */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: black;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(238, 234, 234, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        .question {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: #f4f4f4;
+            padding: 12px;
+            border-radius: 5px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 18px;
+        }
+
+        .option:hover {
+            background: #ddd;
+        }
+
+        .correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+
+        .wrong {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .nav-btn:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quiz World</h1>
+
+        <div id="quiz">
+            <!-- Question 1 -->
+            <div class="quiz-item">
+                <div class="question">1. What is the main source of light on Earth?</div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(this, false)">The Moon 🌙</div>
+                    <div class="option" onclick="checkAnswer(this, true)">The Sun ☀️</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Stars ✨</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Fire 🔥</div>
+                </div>
+            </div>
+
+            <!-- Question 2 (Updated) -->
+            <div class="quiz-item hidden">
+                <div class="question">2. Which planet is known as the Red Planet?</div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(this, false)">Earth 🌎</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Moon 🌕</div>
+                    <div class="option" onclick="checkAnswer(this, true)">Mars 🔴</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Saturn 🪐</div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="quiz-item hidden">
+                <div class="question">3. What do plants need to grow?</div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(this, true)">Sunlight and Water ☀️💧</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Milk and Juice 🥛🍹</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Cake and Ice Cream 🍰🍦</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Books and Music 📚🎵</div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="quiz-item hidden">
+                <div class="question">4. Which sense do we use to smell?</div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(this, false)">Eyes 👀</div>
+                    <div class="option" onclick="checkAnswer(this, true)">Nose 👃</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Ears 👂</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Hands ✋</div>
+                </div>
+            </div>
+
+            <!-- Question 5 (Last Question) -->
+            <div class="quiz-item hidden">
+                <div class="question">5. What is the color of the sky on a clear day?</div>
+                <div class="options">
+                    <div class="option" onclick="checkAnswer(this, false)">Green 🍏</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Red 🍎</div>
+                    <div class="option" onclick="checkAnswer(this, true)">Blue 🔵</div>
+                    <div class="option" onclick="checkAnswer(this, false)">Yellow 🟡</div>
+                </div>
+
+                <!-- Submit Button (Only in the last question) -->
+                <button class="nav-btn" onclick="showResult()">Submit</button>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="prevQuestion()">Previous</button>
+            <button class="nav-btn" onclick="nextQuestion()">Next</button>
+        </div>
+
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        const questions = document.querySelectorAll('.quiz-item');
+        
+        function checkAnswer(element, isCorrect) {
+            if (element.classList.contains("correct") || element.classList.contains("wrong")) return;
+
+            const options = element.parentNode.children;
+            for (let option of options) {
+                option.style.pointerEvents = "none"; // Disable further clicks on this question
+            }
+
+            if (isCorrect) {
+                element.classList.add("correct");
+                score += 1;
+            } else {
+                element.classList.add("wrong");
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                questions[currentQuestion].classList.add("hidden");
+                currentQuestion++;
+                questions[currentQuestion].classList.remove("hidden");
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                questions[currentQuestion].classList.add("hidden");
+                currentQuestion--;
+                questions[currentQuestion].classList.remove("hidden");
+            }
+        }
+
+        function showResult() {
+            document.getElementById('result').classList.remove('hidden');
+            if (score === 5) {
+                document.getElementById('result').innerHTML = "🎉 Perfect! You got everything right! 🌟";
+            } else if (score >= 3) {
+                document.getElementById('result').innerHTML = "😊 Great job! Keep learning! ✨";
+            } else {
+                document.getElementById('result').innerHTML = "😕 Keep trying! You’ll do better next time! 💡";
+            }
+        }
+    </script>
+
+</body>
+</html>

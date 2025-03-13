@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English - Sparkido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('Bg_E.jpg'); /* Replace with your actual image file */
+            background-size: cover; /* Ensures the image covers the entire page */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents repeating */
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+        h1 {
+            font-size: 40px;
+        }
+        .btn {
+            background: whitesmoke;
+            color: black;
+            padding: 20px;
+            margin: 10px;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 250px;
+            height: 200px;
+            border-radius: 15px;
+        }
+        .btn img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        a {
+          text-decoration: none; /* Removes the underline */
+          color: black; /* Changes the text color */
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            color: black;
+            min-width: 220px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            z-index: 1;
+        }
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome to the world of words! 📚</h1>
+
+        <div class="button-container">
+            <!-- First Row: Reading & Listening -->
+            <div class="row">
+                <a href="reading.html">
+                    <button class="btn">
+                        <img src="Reading.png" alt="Reading"> 
+                        Reading
+                    </button>
+                </a>
+
+                <div class="dropdown">
+                    <button class="btn">
+                        <img src="Listening.png" alt="Listening"> 
+                        Listening ▼
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="swing.html">The Swing - Robert Louis Stevenson</a>
+                        <a href="wind.html">Who Has Seen the Wind? - Christina Rossetti</a>
+                        <a href="twinkle.html">Twinkle Twinkle Little Star</a>
+                        <a href="baa_baa.html">Baa Baa Black Sheep</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row: Grammar & Games -->
+            <div class="row">
+                <a href="grammar.html">
+                    <button class="btn">
+                        <img src="Grammar.png" alt="Grammar"> 
+                        Grammar
+                    </button>
+                </a>
+
+                <a href="e_game.html">
+                    <button class="btn">
+                        <img src="Game_E-removebg-preview.png" alt="Games"> 
+                        Games
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

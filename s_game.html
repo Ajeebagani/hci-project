@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Science Race Challenge</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background: url('sci_bg1.jpg') no-repeat center center/cover;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #ffffff;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        /* Question Box */
+        #question-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            width: 80%;
+            max-width: 600px;
+            height: 120px;
+            overflow: hidden;
+        }
+
+        /* Game Track */
+        .track {
+            width: 90%;
+            max-width: 800px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #b8b8b8;
+            margin-bottom: 20px;
+        }
+
+        /* Rocket Icons */
+        .rocket {
+            font-size: 40px;
+            position: absolute;
+            bottom: 10px;
+            transition: left 0.5s ease-in-out;
+        }
+
+        #rocket1, #rocket2 {
+            left: 0;
+        }
+
+        /* Input & Button */
+        .input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .input-label {
+            font-size: 20px;
+            margin-right: 10px;
+            color: #000000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.842); /* Added solid background */
+            border: 0px solid #ffffff;
+        }
+
+        .input-box {
+            font-size: 18px;
+            padding: 10px;
+            width: 150px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 18px;
+            background: #55cfda;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #5f7e96;
+            transform: scale(1.1);
+        }
+
+        /* Feedback */
+        #feedback {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #ff4500;
+        }
+
+        /* Countdown Timer */
+        #countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #a3ffea;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🚀 Science Race Challenge 🏁</h1>
+
+    <!-- Countdown Timer -->
+    <p id="countdown">Game starts in: <span id="timer">3</span> seconds</p>
+
+    <!-- Science Question -->
+    <div id="question-box">
+        <p id="question"></p>
+    </div>
+
+    <!-- Feedback Message -->
+    <p id="feedback"></p>
+
+    <!-- Scoreboard -->
+    <p>Player 1: <span id="score1">0</span> | Player 2: <span id="score2">0</span></p>
+
+    <!-- Game Track -->
+    <div class="track">
+        <span id="rocket1" class="rocket">🚀</span>
+        <span id="rocket2" class="rocket">🛸</span>
+    </div>
+
+    <!-- Player 1 Input -->
+    <div class="input-container">
+        <label class="input-label" for="answer1">Player 1</label>
+        <input type="text" id="answer1" class="input-box">
+        <button class="btn" id="player1-btn" onclick="checkAnswer(1)">Submit ✅</button>
+    </div>
+
+    <!-- Player 2 Input -->
+    <div class="input-container">
+        <label class="input-label" for="answer2">Player 2</label>
+        <input type="text" id="answer2" class="input-box" disabled>
+        <button class="btn" id="player2-btn" onclick="checkAnswer(2)" disabled>Submit ✅</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let score1 = 0, score2 = 0;
+        let correctAnswer;
+        let maxDistance = 700;
+        let player1Turn = true; 
+
+        const questions = [
+            { question: "What do we call an animal that eats both plants and meat?", answer: "omnivore" },
+            { question: "What planet do we live on?", answer: "earth" },
+            { question: "Which planet is called the Red Planet?", answer: "mars" },
+            { question: "What force pulls us to the ground?", answer: "gravity" },
+            { question: "What gas do humans breathe in?", answer: "oxygen" },
+            { question: "What gas do plants release?", answer: "oxygen" },
+            { question: "How many planets are in our solar system?", answer: "8" },
+            { question: "Which gas makes balloons float?", answer: "helium" },
+            { question: "What is H2O commonly known as?", answer: "water" },
+            { question: "Which star is closest to Earth?", answer: "sun" }
+        ];
+
+        function getRandomQuestion() {
+            return questions[Math.floor(Math.random() * questions.length)];
+        }
+
+        function checkAnswer(player) {
+            let playerAnswer = document.getElementById(player === 1 ? "answer1" : "answer2").value.toLowerCase();
+            
+            if (playerAnswer === correctAnswer) {
+                document.getElementById("feedback").innerText = "✅ Correct! Well done!";
+                if (player === 1) {
+                    score1++;
+                    document.getElementById("score1").innerText = score1;
+                    moveRocket(1);
+                    nextQuestion(2);  
+                } else {
+                    score2++;
+                    document.getElementById("score2").innerText = score2;
+                    moveRocket(2);
+                    nextQuestion(1);
+                }
+            } else {
+                document.getElementById("feedback").innerText = "❌ Wrong! Player 2, your turn!";
+                if (player === 1) {
+                    enablePlayer(2);
+                } else {
+                    enablePlayer(1);
+                }
+            }
+        }
+
+        function moveRocket(player) {
+            const rocket = document.getElementById(player === 1 ? "rocket1" : "rocket2");
+            let newPosition = (parseInt(rocket.style.left, 10) || 0) + 100;
+            if (newPosition <= maxDistance) {
+                rocket.style.left = newPosition + "px";
+            }
+        }
+
+        function nextQuestion(nextPlayer) {
+            const randomQuestion = getRandomQuestion();
+            document.getElementById("question").innerText = randomQuestion.question;
+            correctAnswer = randomQuestion.answer;
+            enablePlayer(nextPlayer);
+        }
+
+        function enablePlayer(player) {
+            document.getElementById("answer1").disabled = player !== 1;
+            document.getElementById("player1-btn").disabled = player !== 1;
+            document.getElementById("answer2").disabled = player !== 2;
+            document.getElementById("player2-btn").disabled = player !== 2;
+        }
+
+        let countdownValue = 3;
+        function updateCountdown() {
+            if (countdownValue > 0) {
+                document.getElementById("timer").innerText = countdownValue;
+                countdownValue--;
+                setTimeout(updateCountdown, 1000);
+            } else {
+                document.getElementById("timer").innerText = "Go!";
+                nextQuestion(1);
+            }
+        }
+
+        updateCountdown();
+    </script>
+
+</body>
+</html>

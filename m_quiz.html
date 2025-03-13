@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Quiz - BrainPOP Style</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background: url('m_bg1.png') no-repeat center center/cover;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Responsive Quiz Container */
+        .quiz-container {
+            width: 95%;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Quiz Title */
+        h2 {
+            color: #ff4500;
+            font-size: 24px;
+        }
+
+        /* Responsive Question Image */
+        #question-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Question */
+        .question {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        /* Responsive Options */
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+            margin: 8px 0;
+            cursor: pointer;
+            background: #ff4500;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .options button:hover {
+            background: #ffb32f;
+            transform: scale(1.05);
+        }
+
+        /* Restart Button */
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            background: #32CD32;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #228B22;
+            transform: scale(1.1);
+        }
+
+        /* Mobile-Friendly Design */
+        @media (max-width: 768px) {
+            .quiz-container {
+                width: 100%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .question {
+                font-size: 18px;
+            }
+
+            .options button {
+                font-size: 14px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container">
+        <h2>🧠 Fun Quiz Time!</h2>
+        
+        <!-- New Image Above Question -->
+        <img id="question-image" src="" alt="Math Learning Scene">
+
+        <p class="question" id="question"></p>
+        <div class="options" id="options"></div>
+        <p id="result"></p>
+        <button class="btn" onclick="restartQuiz()">Restart Quiz 🔄</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "What is 8 + 4?",
+                options: ["10", "11", "12", "13"],
+                a: "12",
+                img: "image1.jpg"
+            },
+            {
+                q: "What is 6 × 3?",
+                options: ["16", "18", "20", "22"],
+                a: "18",
+                img: "image2.jpg"
+            },
+            {
+                q: "What is 15 - 7?",
+                options: ["6", "7", "8", "9"],
+                a: "8",
+                img: "image3.jpg"
+            },
+            {
+                q: "What is 9 ÷ 3?",
+                options: ["2", "3", "4", "5"],
+                a: "3",
+                img: "image4.jpg"
+            },
+            {
+                q: "What is 20 + 5?",
+                options: ["22", "23", "25", "26"],
+                a: "25",
+                img: "image5.jpg"
+            }
+        ];
+
+        let index = 0;
+
+        function loadQuestion() {
+            if (index >= questions.length) {
+                document.getElementById("question").innerText = "🎉 Quiz Completed!";
+                document.getElementById("options").innerHTML = "";
+                document.getElementById("question-image").style.display = "none";
+                return;
+            }
+
+            document.getElementById("question").innerText = questions[index].q;
+            document.getElementById("question-image").src = questions[index].img;
+            document.getElementById("options").innerHTML = "";
+            questions[index].options.forEach(option => {
+                let btn = document.createElement("button");
+                btn.innerText = option;
+                btn.onclick = () => checkAnswer(option);
+                document.getElementById("options").appendChild(btn);
+            });
+            document.getElementById("result").innerText = "";
+        }
+
+        function checkAnswer(selected) {
+            if (selected === questions[index].a) {
+                document.getElementById("result").innerText = "🎉 Correct!";
+                index++;
+                setTimeout(loadQuestion, 1000);
+            } else {
+                document.getElementById("result").innerText = "❌ Try again!";
+            }
+        }
+
+        function restartQuiz() {
+            index = 0;
+            document.getElementById("question-image").style.display = "block";
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>

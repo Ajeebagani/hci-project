@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science - Sparkido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('Bg_E.jpg');/* Replace with your actual image file */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+        h1 {
+            font-size: 40px;
+        }
+        .btn {
+            background: whitesmoke;
+            color: black;
+            padding: 20px;
+            margin: 10px;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 250px;
+            height: 200px;
+            border-radius: 15px;
+        }
+        .btn img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Welcome, young scientist! 🧪</h1>
+
+        <div class="button-container">
+            <!-- First Row: Experiments & Quiz -->
+            <div class="row">
+                <a href="science_experiments.html">
+                    <button class="btn">
+                        <img src="Exp.png" alt="Experiments"> 
+                        Experiments
+                    </button>
+                </a>
+
+                <a href="science_quiz.html">
+                    <button class="btn">
+                        <img src="Squiz.png" alt="Quiz"> 
+                        Quiz
+                    </button>
+                </a>
+            </div>
+
+            <!-- Second Row: Puzzles & Games -->
+            <div class="row">
+                <a href="science_puzzles.html">
+                    <button class="btn">
+                        <img src="Spuzzle.jpg" alt="Puzzles"> 
+                        Puzzles
+                    </button>
+                </a>
+
+                <a href="s_game.html">
+                    <button class="btn">
+                        <img src="Sgame.jpg" alt="Games"> 
+                        Games
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

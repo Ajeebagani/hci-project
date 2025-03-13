@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reading Practice - Sparkido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: url('eng_bg1.jpg') no-repeat center/cover;
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            margin: 50px auto;
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #ffcc00;
+        }
+
+        .story {
+            font-size: 20px;
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+            line-height: 1.5;
+        }
+
+        #speak-btn, #next-btn, #try-again-btn {
+            background: #ffcc00;
+            border: none;
+            padding: 10px 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        #speak-btn:hover, #next-btn:hover, #try-again-btn:hover {
+            background: #ffdb4d;
+        }
+
+        .questions {
+            margin-top: 30px;
+        }
+
+        .answer {
+            background: lightblue;
+            border: none;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+            transition: 0.3s;
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+        }
+
+        .answer:hover {
+            background: lightgray;
+        }
+
+        .correct {
+            background: lightgreen !important;
+        }
+
+        .wrong {
+            background: red !important;
+            color: white;
+        }
+
+        #result {
+            font-size: 22px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Let's Read Together!</h1>
+
+        <!-- Story Section -->
+        <div class="story">
+            <p id="story-text">
+                Once upon a time, in a bright green forest, a little bunny named Bella loved to hop around and play. 
+                One day, she found a shiny red apple under a tree. Bella wanted to share it with her best friend, Max the squirrel.
+            </p>
+            <button id="speak-btn">🔊 Read Aloud</button>
+        </div>
+
+        <!-- Questions Section -->
+        <div class="questions" id="question-container">
+            <h2>Let's Answer Some Questions!</h2>
+            <p id="question-text">1. What did Bella find under the tree?</p>
+            <button class="answer" onclick="checkAnswer(this, 'right')">A red apple 🍎</button>
+            <button class="answer" onclick="checkAnswer(this, 'wrong')">A banana 🍌</button>
+
+            <p id="result"></p>
+        </div>
+
+        <button id="next-btn" onclick="loadNextStory()">Next Story ➡️</button>
+        <button id="try-again-btn" onclick="tryAgain()" style="display:none;">Try Again</button>
+    </div>
+
+    <script>
+        let speech = null;
+        let answeredQuestions = 0;
+        let totalQuestions = 3; 
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const speakBtn = document.getElementById("speak-btn");
+            const storyText = document.getElementById("story-text");
+
+            speakBtn.addEventListener("click", () => {
+                if (speechSynthesis.speaking) {
+                    speechSynthesis.cancel();
+                }
+                speech = new SpeechSynthesisUtterance(storyText.textContent);
+                speech.lang = "en-US";
+                speechSynthesis.speak(speech);
+            });
+        });
+
+        function checkAnswer(button, correctness) {
+            let feedback = document.getElementById("result");
+
+            if (correctness === "right") {
+                button.classList.add("correct");
+                feedback.innerHTML = "🎉 Hooray! You got it right! Keep going! 🚀";
+            } else {
+                button.classList.add("wrong");
+                feedback.innerHTML = "❌ Oops! No worries, try again! You're learning! 😊";
+            }
+
+            if (!button.classList.contains("answered")) {
+                answeredQuestions++;
+                button.classList.add("answered");
+            }
+
+            document.querySelectorAll(".answer").forEach(btn => btn.disabled = true);
+        }
+
+        const stories = [
+            {
+                text: "Once upon a time, in a bright green forest, a little bunny named Bella loved to hop around and play. One day, she found a shiny red apple under a tree. Bella wanted to share it with her best friend, Max the squirrel.",
+                question: "What did Bella find under the tree?",
+                answers: [
+                    { text: "A red apple 🍎", correct: true },
+                    { text: "A banana 🍌", correct: false }
+                ]
+            },
+            {
+                text: "In a small village, there was a kind girl named Emma. She loved to read books every night before going to bed. One day, she found a magical book that glowed in the dark.",
+                question: "What did Emma find?",
+                answers: [
+                    { text: "A magical book 📖", correct: true },
+                    { text: "A shiny necklace 💎", correct: false }
+                ]
+            },
+            {
+                text: "Tommy the cat loved to chase butterflies in the garden. But one day, he found a lost little bird and decided to help it find its way home.",
+                question: "What did Tommy the cat do?",
+                answers: [
+                    { text: "Helped a lost bird 🐦", correct: true },
+                    { text: "Chased butterflies 🦋", correct: false }
+                ]
+            }
+        ];
+
+        let currentStoryIndex = 0;
+
+        function loadNextStory() {
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+            }
+
+            if (currentStoryIndex >= stories.length - 1) {
+                if (answeredQuestions >= totalQuestions) {
+                    document.getElementById("question-container").innerHTML = `<h2>🎉 Amazing! You finished all the stories! You're a superstar! 🌟</h2>`;
+                    document.getElementById("next-btn").style.display = "none";
+                    document.getElementById("try-again-btn").style.display = "block"; // Show Try Again Button
+                } else {
+                    document.getElementById("question-container").innerHTML = `<h2>⚠️ Oops! Looks like you missed some questions. Let's go back and try them! 😊</h2>`;
+                    document.getElementById("try-again-btn").style.display = "block"; // Show Try Again Button
+                    document.getElementById("next-btn").style.display = "none"; // Hide Next Button
+                }
+                return;
+            }
+
+            currentStoryIndex++;
+
+            const story = stories[currentStoryIndex];
+
+            document.getElementById("story-text").textContent = story.text;
+
+            document.getElementById("question-container").innerHTML = `
+                <h2>Let's Answer Some Questions!</h2>
+                <p id="question-text">${story.question}</p>
+                ${story.answers.map(ans => `
+                    <button class="answer" onclick="checkAnswer(this, '${ans.correct ? "right" : "wrong"}')">
+                        ${ans.text}
+                    </button>
+                `).join("")}
+                <p id="result"></p>
+            `;
+        }
+
+        function tryAgain() {
+            // Reset the game to the first story
+            currentStoryIndex = 0;
+            answeredQuestions = 0;
+            document.getElementById("next-btn").style.display = "block";
+            document.getElementById("try-again-btn").style.display = "none";
+            document.getElementById("result").textContent = "";
+
+            const firstStory = stories[currentStoryIndex];
+            document.getElementById("story-text").textContent = firstStory.text;
+
+            document.getElementById("question-container").innerHTML = `
+                <h2>Let's Answer Some Questions!</h2>
+                <p id="question-text">${firstStory.question}</p>
+                ${firstStory.answers.map(ans => `
+                    <button class="answer" onclick="checkAnswer(this, '${ans.correct ? "right" : "wrong"}')">
+                        ${ans.text}
+                    </button>
+                `).join("")}
+                <p id="result"></p>
+            `;
+        }
+    </script>
+
+</body>
+</html>

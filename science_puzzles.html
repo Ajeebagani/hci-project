@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Puzzles - Sparkido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('Sci_bg_1.jpg');/* Replace with your actual image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            font-size: 40px;
+        }
+        .puzzle {
+            background: rgba(238, 234, 234, 0.7);
+            color: black;
+            padding: 20px;
+            margin: 10px auto;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            display: none; /* Initially hide all puzzles */
+        }
+        #puzzle2, #puzzle3 {
+            width: 90%; /* Increased width */
+            max-width: 600px; /* Increased max width */
+            padding: 30px; /* More padding */
+        }
+
+        .active {
+            display: block; /* Show only active puzzle */
+        }
+        .drop-box {
+            border: 2px dashed black;
+            padding: 15px;
+            min-height: 40px;
+            margin: 10px;
+            font-size: 18px;
+            background: white;
+            color: black;
+        }
+        .draggable {
+            padding: 10px;
+            background: lightblue;
+            cursor: grab;
+            display: inline-block;
+            margin: 5px;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        input {
+            width: 100%;
+            max-width: 450px; /* Increased width */
+            padding: 20px; /* Increased padding */
+            margin: 10px;
+            font-size: 24px; /* Larger font size */
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            text-align: center;
+        }
+        button {
+            background: #0e1298;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #4595a0;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fun Time!</h1>
+
+        <!-- Puzzle 1: Drag and Drop -->
+        <div class="puzzle active" id="puzzle1">
+            <h3>Match the Object to its Scientist</h3>
+            <p>Drag the objects to their correct scientists:</p>
+            <div class="draggable" draggable="true" id="gravity">Gravity</div>
+            <div class="draggable" draggable="true" id="lightbulb">Light Bulb</div>
+            <div class="draggable" draggable="true" id="electricity">Electricity</div>
+
+            <p>Newton</p>
+            <div class="drop-box" id="newton-box"></div>
+            <p>Edison</p>
+            <div class="drop-box" id="edison-box"></div>
+            <p>Franklin</p>
+            <div class="drop-box" id="franklin-box"></div>
+
+            <button onclick="checkPuzzle1()">Check Answer</button>
+            <p id="result1"></p>
+
+            <div class="nav-buttons">
+                <span></span> <!-- Empty span for alignment -->
+                <button onclick="nextPuzzle()">Next</button>
+            </div>
+        </div>
+
+        <!-- Puzzle 2: Identify the Scientist (Larger Input Box) -->
+        <div class="puzzle" id="puzzle2">
+            <h3>Identify the Scientist</h3>
+            <p>Who developed the theory of relativity?</p>
+            <input type="text" id="answer2"> <!-- Increased size -->
+            <button onclick="checkPuzzle2()">Check Answer</button>
+            <p id="result2"></p>
+
+            <div class="nav-buttons">
+                <button onclick="prevPuzzle()">Previous</button>
+                <button onclick="nextPuzzle()">Next</button>
+            </div>
+        </div>
+
+        <!-- Puzzle 3: Science Riddle (Larger Input Box) -->
+        <div class="puzzle" id="puzzle3">
+            <h3>Science Riddle</h3>
+            <p>I rise in the east and set in the west. What am I?</p>
+            <input type="text" id="answer3"> <!-- Increased size -->
+            <button onclick="checkPuzzle3()">Check Answer</button>
+            <p id="result3"></p>
+
+            <div class="nav-buttons">
+                <button onclick="prevPuzzle()">Previous</button>
+                <span></span> <!-- Empty span for alignment -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPuzzle = 1;
+
+        function nextPuzzle() {
+            document.getElementById(`puzzle${currentPuzzle}`).classList.remove("active");
+            currentPuzzle++;
+            if (document.getElementById(`puzzle${currentPuzzle}`)) {
+                document.getElementById(`puzzle${currentPuzzle}`).classList.add("active");
+            }
+        }
+
+        function prevPuzzle() {
+            document.getElementById(`puzzle${currentPuzzle}`).classList.remove("active");
+            currentPuzzle--;
+            if (document.getElementById(`puzzle${currentPuzzle}`)) {
+                document.getElementById(`puzzle${currentPuzzle}`).classList.add("active");
+            }
+        }
+
+        function checkPuzzle1() {
+            const newton = document.getElementById("newton-box").textContent.trim();
+            const edison = document.getElementById("edison-box").textContent.trim();
+            const franklin = document.getElementById("franklin-box").textContent.trim();
+            if (newton === "Gravity" && edison === "Light Bulb" && franklin === "Electricity") {
+                document.getElementById("result1").textContent = "Correct! 🎉";
+            } else {
+                document.getElementById("result1").textContent = "Try Again!";
+            }
+        }
+
+        function checkPuzzle2() {
+            let answer = document.getElementById("answer2").value.toLowerCase();
+            if (answer === "einstein") {
+                document.getElementById("result2").textContent = "Correct! 🎓";
+            } else {
+                document.getElementById("result2").textContent = "Oops! Try again.";
+            }
+        }
+
+        function checkPuzzle3() {
+            let answer = document.getElementById("answer3").value.toLowerCase();
+            if (answer === "sun") {
+                document.getElementById("result3").textContent = "Correct! ☀️";
+            } else {
+                document.getElementById("result3").textContent = "Try again!";
+            }
+        }
+
+        // Drag and Drop Functionality
+        document.querySelectorAll(".draggable").forEach(item => {
+            item.addEventListener("dragstart", event => {
+                event.dataTransfer.setData("text", event.target.id);
+            });
+        });
+
+        document.querySelectorAll(".drop-box").forEach(box => {
+            box.addEventListener("dragover", event => {
+                event.preventDefault();
+            });
+
+            box.addEventListener("drop", event => {
+                event.preventDefault();
+                let data = event.dataTransfer.getData("text");
+                let draggedElement = document.getElementById(data);
+                event.target.textContent = draggedElement.textContent;
+            });
+        });
+
+    </script>
+
+</body>
+</html>

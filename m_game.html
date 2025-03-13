@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balloon Pop Math Game - Sparkido</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('m_bg1.png'); /* Replace with your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: rgb(0, 0, 103);
+            text-align: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .balloon {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+            background-color: rgba(52, 104, 153, 0.823);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a644d;
+            color: rgb(223, 223, 223);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background: #499c6c;
+        }
+
+        .answer-btn {
+            background-color: #274d85;
+            color: rgb(211, 211, 211);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .answer-btn:hover {
+            background: #26006e;
+        }
+
+        .score, .timer {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        /* Ensure balloons do not get cut off */
+        #balloon-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Balloon Pop Math Game</h1>
+        <p>Click the balloons and solve the math question to pop them! Try to score at least 5 points in 1 minute!</p>
+
+        <div id="balloon-container"></div>
+
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="timer">Time Left: <span id="time">60</span> seconds</div>
+    </div>
+
+    <a href="maths.html">
+        <button class="back-btn">Back to Maths</button>
+    </a>
+
+    <script>
+        let score = 0;
+        let balloonInterval;
+        let timeLeft = 60; // 1-minute timer
+        let balloonsPopped = 0;
+
+        const balloonContainer = document.getElementById('balloon-container');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('time');
+
+        const mathQuestions = [
+            { question: '2 + 2', answer: 4, options: [4, 5, 6] },
+            { question: '3 - 1', answer: 2, options: [2, 3, 4] },
+            { question: '5 + 3', answer: 8, options: [8, 6, 10] },
+            { question: '7 - 4', answer: 3, options: [3, 4, 5] },
+            { question: '6 + 2', answer: 8, options: [7, 8, 9] },
+            { question: '9 - 3', answer: 6, options: [6, 7, 5] }
+        ];
+
+        function generateBalloon() {
+            const randomIndex = Math.floor(Math.random() * mathQuestions.length);
+            const balloon = document.createElement('div');
+            balloon.classList.add('balloon');
+
+            const question = mathQuestions[randomIndex].question;
+            const correctAnswer = mathQuestions[randomIndex].answer;
+            const options = mathQuestions[randomIndex].options;
+
+            balloon.textContent = question;
+
+            // Position the balloon at the bottom with a random horizontal position
+            balloon.style.left = `${Math.random() * 80}%`;  
+            balloon.style.bottom = `0px`; 
+
+            balloonContainer.appendChild(balloon);
+
+            // Add event listener for balloon click
+            balloon.addEventListener('click', () => {
+                const answerButtons = options.map(option => {
+                    const button = document.createElement('button');
+                    button.classList.add('answer-btn');
+                    button.textContent = option;
+                    button.addEventListener('click', (e) => {
+                        if (parseInt(e.target.textContent) === correctAnswer) {
+                            score++;
+                            scoreDisplay.textContent = score;
+                            balloon.remove();
+                            balloonsPopped++;
+                        } else {
+                            alert('Oops! Try again!');
+                        }
+                    });
+                    return button;
+                });
+
+                const answerDiv = document.createElement('div');
+                answerButtons.forEach(button => answerDiv.appendChild(button));
+
+                balloon.textContent = '';
+                balloon.appendChild(answerDiv);
+            });
+
+            // Move balloon up
+            let balloonPos = 0;
+            const balloonMoveInterval = setInterval(() => {
+                if (balloonPos >= window.innerHeight) {
+                    balloon.remove();
+                    clearInterval(balloonMoveInterval);
+                } else {
+                    balloonPos += 1.5; 
+                    balloon.style.bottom = `${balloonPos}px`;
+                }
+            }, 15);
+        }
+
+        function startTimer() {
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    clearInterval(balloonInterval);
+                    
+                    if (score >= 5) {
+                        alert('🎉 Congratulations! You scored 5 or more points!');
+                    } else {
+                        alert('😢 Better luck next time! Try again!');
+                    }
+                }
+            }, 1000);
+        }
+
+        // Start game
+        balloonInterval = setInterval(generateBalloon, 2000);
+        startTimer();
+    </script>
+
+</body>
+</html>
